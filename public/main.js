@@ -23,7 +23,7 @@ require(['Controller', 'Player'], function (Controller, Player) {
     socket.emit("drawLine",{
         x: player.x,
         y: player.y,
-        width: 10,
+        width: player.radius,
         color: player.color
     });
     console.log("Waitings!");
@@ -36,6 +36,7 @@ require(['Controller', 'Player'], function (Controller, Player) {
 
     function gameLoop () {
         controllsCheck();
+        if(player.isColliding()){kill()};
     }
 
     function controllsCheck () {
@@ -50,7 +51,7 @@ require(['Controller', 'Player'], function (Controller, Player) {
         var data = {
             x: player.x,
             y: player.y,
-            width: 10,
+            width: player.radius,
             color: player.color
         }
         socket.emit('drawLine', data);
@@ -71,4 +72,7 @@ require(['Controller', 'Player'], function (Controller, Player) {
         context.closePath();
     }
 
+    function kill(){
+        console.log("You Dieded")
+    }
 });
