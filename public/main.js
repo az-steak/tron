@@ -1,5 +1,8 @@
 var socket;
 
-function server () {
+function main () {
     socket = new io();
 }
+
+
+main();
