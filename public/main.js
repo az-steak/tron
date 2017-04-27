@@ -12,14 +12,30 @@ require(['Controller', 'Player'], function (Controller, Player) {
     canvas  = $(".whiteboard")[0];
     context = canvas.getContext('2d');
 
-    player = new Player({x: 500, y: 500}, 'red');
+    player = new Player({x: 500, y: 500}, '#'+(Math.random()*0xFFFFFF<<0).toString(16));
 
     /// Listeners
 
-    setInterval(controllsCheck, 10);
 
-
+    socket.on("gameStart", startGame)
     socket.on("drawLine",drawLine);
+    socket.emit("drawLine",{
+        x: player.x,
+        y: player.y,
+        width: 10,
+        color: player.color
+    });
+    console.log("Waitings!");
+
+
+    function startGame () {
+        console.log("start!");
+        setInterval(gameLoop, 10);
+    }
+
+    function gameLoop () {
+        controllsCheck();
+    }
 
     function controllsCheck () {
         if (controller.keys[37]) { // left arrow
@@ -34,9 +50,9 @@ require(['Controller', 'Player'], function (Controller, Player) {
             x: player.x,
             y: player.y,
             width: 10,
-            color: 'red'
+            color: player.color
         }
-        drawLine(data);
+        socket.emit('drawLine', data);
     }
 
     function drawLine (data) {

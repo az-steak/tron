@@ -8,6 +8,7 @@ define([], function () {
         this.y = startPos.y
 
         this.angle = 0;
+        this.color = colorValue;
 
 
     }
