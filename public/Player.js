@@ -16,11 +16,19 @@ define([], function () {
 
     Player.prototype.isColliding = function() {
         isPixelWhite = true;
+<<<<<<< HEAD
         var imageData = this.context.getImageData(this.x, this.y,this.x +1, this.y + 1);
         var index;
 
         console.log(this.context);
         for (index = 0; index < imageData.data.length; index += 4) {
+=======
+       var imageData = this.context.getImageData();
+        var index;
+
+        console.log(this.context);
+        for (index = 0; index < getImageData.data.length; index += 4) {
+>>>>>>> e86b430bd197599635208abdb9c44c1527366b6c
             if (imageData.data[index] != 255 || imageData.data[index + 1] != 255 || imageData.data[index + 2] != 255) {
                 return true;
                 console.log(isPixelWhite)
