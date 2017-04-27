@@ -1,0 +1,56 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/**
+ * Canvas
+ */
+
+.whiteboard {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+}
+
+.rangeWidth {
+    position: absolute;
+    top: 2%;
+    right: 20px;
+    width: 50%;
+}
+
+.clear {
+    position: fixed;
+    bottom: 0;
+
+    display: inline-block;
+    height: 48px;
+    width: 48px;
+    cursor: pointer;
+    background-color: gray;
+}
+.colors {
+  position: fixed;
+}
+
+.color {
+  display: inline-block;
+  height: 48px;
+  width: 48px;
+  cursor: pointer;
+}
+
+.color.black { background-color: black; }
+.color.red { background-color: red; }
+.color.green { background-color: green; }
+.color.blue { background-color: blue; }
+.color.yellow { background-color: yellow; }
