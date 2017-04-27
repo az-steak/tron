@@ -18,23 +18,39 @@ require(['Controller', 'Player'], function (Controller, Player) {
 
     setInterval(controllsCheck, 10);
 
+
     socket.on("drawLine",drawLine);
 
     function controllsCheck () {
         if (controller.keys[37]) { // left arrow
-            player.rotate(1);
-        } else if (controller.keys[39]) { // right arrow
             player.rotate(-1);
+        } else if (controller.keys[39]) { // right arrow
+            player.rotate(1);
         }
+        player.move();
+
+        // console.log(player.Pos);
+        var data = {
+            x: player.x,
+            y: player.y,
+            width: 10,
+            color: 'red'
+        }
+        drawLine(data);
     }
 
     function drawLine (data) {
-        context.beginPath();
 
-        context.arc(data.endPos[0], data.endPos[1], data.width, 0, 2 * Math.PI, false);
+        context.beginPath();
+        context.arc(data.x-1, data.y-1, data.width, 0, 2 * Math.PI, false);
         context.fillStyle = data.color;
         context.fill();
+        context.closePath();
 
+        context.beginPath();
+        context.arc(data.x, data.y, data.width / 2, 0, 2 * Math.PI, false);
+        context.fillStyle = 'blue';
+        context.fill();
         context.closePath();
     }
 

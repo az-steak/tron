@@ -7,7 +7,6 @@ const IO      = require('socket.io')(HTTP);
 IO.on('connection', onConnection)
 
 function onConnection(socket) {
-    console.log('connected');
 }
 
 
