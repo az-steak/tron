@@ -1,8 +1,8 @@
 define([], function () {
     function Player(startPos, colorValue) {
         var myPlayer;
-        var speed = 10;
-
+        this.speed = 10;
+        this.rotationSpeed = 1;
 
         this.Pos = {
             x: startPos.x,
@@ -13,14 +13,13 @@ define([], function () {
 
 
     }
-    /*function canvasId(){
-        var myCanvas = document.getElementsByClassName("whiteboard");
-        var context = myCanvas.getContext('2d');
-        var imageData = context.getImageData(x, y, myCanvas.width, myCanvas.height);
-        var index;
-        for(index = 0; index < imageData.data.length; index += 4){
-    
-        }
+    /*
+    function canvasId(){
+        var myCanvas    = document.getElementsByClassName("whiteboard");
+        var context     = myCanvas.getContext('2d');
+        var imageData   = context.getImageData(x, y, myCanvas.width, myCanvas.height);
+        if(imageData.data[index] == 255 && imageData.data[index + 1] == 255 && imageData.data[index + 2] == 255){}
+
     }
     
     Player.prototype.collisionManager = function(acutalPos) {
@@ -28,13 +27,13 @@ define([], function () {
     }*/
 
     Player.prototype.move = function () {
-        this.x += Math.cos(this.angle) * speed;
-        this.y += Math.sin(this.angle) * speed;
+        this.x += Math.cos(this.angle) * this.speed;
+        this.y += Math.sin(this.angle) * this.speed;
 
     }
 
-    Player.prototype.rotate = function (angle, rotationSpeed, inputRotation) {
-        this.angle += rotationSpeed * inputRotation
+    Player.prototype.rotate = function (rotationDir) {
+        this.angle += this.rotationSpeed * rotationDir
     }
 
     return Player();
