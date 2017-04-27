@@ -1,9 +1,10 @@
-require(['Controller'], function (Controller) {
+require(['Controller', 'Player'], function (Controller, Player) {
 
     var socket;
     var controller;
     var canvas;
     var context;
+    var player;
 
     socket = new io();
     controller = new Controller($('body'));
@@ -11,6 +12,7 @@ require(['Controller'], function (Controller) {
     canvas  = $(".whiteboard")[0];
     context = canvas.getContext('2d');
 
+    player = new Player({x: 500, y: 500}, 'red');
 
     /// Listeners
 
@@ -19,7 +21,11 @@ require(['Controller'], function (Controller) {
     socket.on("drawLine",drawLine);
 
     function controllsCheck () {
-
+        if (controller.keys[37]) { // left arrow
+            player.rotate(1);
+        } else if (controller.keys[39]) { // right arrow
+            player.rotate(-1);
+        }
     }
 
     function drawLine (data) {
