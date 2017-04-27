@@ -1,5 +1,8 @@
 require(['Controller', 'Player'], function (Controller, Player) {
 
+    const RESOLUTION = {width:1920, height:1080}
+    const BORDER_SIZE= 30;
+
     var socket;
     var controller;
     var canvas;
@@ -22,16 +25,18 @@ require(['Controller', 'Player'], function (Controller, Player) {
     socket.on("drawLine", drawLine);
     socket.on("reset", reset);
 
-    $("body").on('keydown',function(event){
-        if(event.keyCode == 37){
-            player.rotate(-1);
-        } else if(event.keyCode == 39) {
-            player.rotate(1);
-        }
-    })
+    // $("body").on('keydown',function(event){
+    //     if(event.keyCode == 37){
+    //         player.rotate(-1);
+    //     } else if(event.keyCode == 39) {
+    //         player.rotate(1);
+    //     }
+    // })
 
 
     function spawn (data) {
+        drawBorder();
+        // clearCanvas();
         var randomColor = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
         player = new Player({x: data.spawn.x, y: data.spawn.y}, randomColor, context);
 
@@ -56,7 +61,7 @@ require(['Controller', 'Player'], function (Controller, Player) {
     }
 
     function gameLoop () {
-        // controllsCheck(); // smooth controls
+        controllsCheck(); // smooth controls
 
         player.move();
         if(player.isColliding()){kill()};
@@ -99,8 +104,16 @@ require(['Controller', 'Player'], function (Controller, Player) {
         context.stroke();
         context.closePath();
     }
+    function drawBorder() {
+        context.fillStyle = "#111";
+        context.fillRect(0, 0, RESOLUTION.width, BORDER_SIZE); // upBorder
+        context.fillRect(0, RESOLUTION.height - BORDER_SIZE, RESOLUTION.width, RESOLUTION.height); // downBorder
+        context.fillRect(0, 0, BORDER_SIZE, RESOLUTION.height); // leftBorder
+        context.fillRect(RESOLUTION.width - BORDER_SIZE, 0, RESOLUTION.width + BORDER_SIZE, RESOLUTION.height); // rightBorder
+    }
     function clearCanvas() {
         context.clearRect(0, 0, 1920, 1080);
+        drawBorder();
     }
 
     function reset () {

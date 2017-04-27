@@ -1,11 +1,12 @@
 define([], function () {
 
     const BOOST_DISTANCE = 3;
+    const MAX_SPEED = 5;
 
     function Player(startPos, colorValue, context) {
         var myPlayer;
-        this.normalSpeed = 2
-        this.speed = 2;
+        this.normalSpeed = 2;
+        this.speed = this.normalSpeed;
         this.rotationSpeed = 0.05;
         this.context = context;
 
@@ -43,10 +44,10 @@ define([], function () {
             return true;
         }
 
-        if (isHittingTrail(imageDataRight) || isHittingTrail(imageDataLeft)) {
+        if ((isHittingTrail(imageDataRight) || isHittingTrail(imageDataLeft) ) && this.speed < MAX_SPEED) {
             this.speed *= 1.02;
         } else if(this.speed > this.normalSpeed){
-            this.speed *= 0.98;
+            this.speed *= 0.95;
         }
 
 
@@ -68,7 +69,7 @@ define([], function () {
     }
 
     Player.prototype.rotate = function (rotationDir) {
-        this.angle += Math.PI * 0.5 * rotationDir;
+        this.angle += Math.PI * 0.01 * rotationDir;
     }
 
     return Player;

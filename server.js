@@ -49,7 +49,7 @@ function playerKilled () {
 }
 
 function checkEnd () {
-    if (deadPlayers == playerNumber-1) {
+    if (deadPlayers == players.length-1) {
         setTimeout(resetGame, 3000);
     }
 }
