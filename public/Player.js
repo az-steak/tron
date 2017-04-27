@@ -1,8 +1,9 @@
 define([], function () {
-    function Player(startPos, colorValue) {
+    function Player(startPos, colorValue, context) {
         var myPlayer;
         this.speed = 2;
         this.rotationSpeed = 0.05;
+        this.context = context;
 
         this.x = startPos.x
         this.y = startPos.y
@@ -12,12 +13,12 @@ define([], function () {
 
     }
 
-    Player.prototype.CollisionManager = function() {
+    Player.prototype.isColliding = function() {
         isPixelWhite = true;
-        var myCanvas = document.getElementsByClassName("whiteboard")[0];
-        var context = myCanvas.getContext('2d');
-        var imageData = context.getImageData(this.x - 5, this.y - 5, this.x + 5, this.y + 5);
+       var imageData = this.context.getImageData();
         var index;
+
+        console.log(this.context);
         for (index = 0; index < getImageData.data.length; index += 4) {
             if (imageData.data[index] != 255 || imageData.data[index + 1] != 255 || imageData.data[index + 2] != 255) {
                 return true;

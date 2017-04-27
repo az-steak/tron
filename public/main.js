@@ -36,6 +36,7 @@ require(['Controller', 'Player'], function (Controller, Player) {
 
     function gameLoop () {
         controllsCheck();
+        if(player.isColliding()){kill()};
     }
 
     function controllsCheck () {
@@ -71,4 +72,7 @@ require(['Controller', 'Player'], function (Controller, Player) {
         context.closePath();
     }
 
+    function kill(){
+        console.log("You Dieded")
+    }
 });
