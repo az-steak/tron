@@ -12,7 +12,8 @@ require(['Controller', 'Player'], function (Controller, Player) {
     canvas  = $(".whiteboard")[0];
     context = canvas.getContext('2d');
 
-    player = new Player({x: 500, y: 500}, '#'+(Math.random()*0xFFFFFF<<0).toString(16));
+    var randomColor = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+    player = new Player({x: 500, y: 500}, randomColor, context);
 
     /// Listeners
 
