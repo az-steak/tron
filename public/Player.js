@@ -1,6 +1,10 @@
 define([], function () {
+
+    const BOOST_DISTANCE = 3;
+
     function Player(startPos, colorValue, context) {
         var myPlayer;
+        this.normalSpeed = 2
         this.speed = 2;
         this.rotationSpeed = 0.05;
         this.context = context;
@@ -16,27 +20,45 @@ define([], function () {
 
     Player.prototype.isColliding = function() {
         isPixelWhite = true;
-<<<<<<< HEAD
-        var imageData = this.context.getImageData(this.x, this.y,this.x +1, this.y + 1);
-        var index;
 
-        console.log(this.context);
-        for (index = 0; index < imageData.data.length; index += 4) {
-=======
-       var imageData = this.context.getImageData();
-        var index;
 
-        console.log(this.context);
-        for (index = 0; index < getImageData.data.length; index += 4) {
->>>>>>> e86b430bd197599635208abdb9c44c1527366b6c
-            if (imageData.data[index] != 255 || imageData.data[index + 1] != 255 || imageData.data[index + 2] != 255) {
-                return true;
-                console.log(isPixelWhite)
-            }
+        var targetFront = {
+            x: this.x + Math.cos(this.angle) * this.radius * 1.4,
+            y: this.y + Math.sin(this.angle) * this.radius * 1.4
+        };
+        var imageDataFront = this.context.getImageData(targetFront.x, targetFront.y, 1, 1);
+
+        var targetLeft = {
+            x: this.x + Math.cos(this.angle + Math.PI*0.5) * this.radius * BOOST_DISTANCE,
+            y: this.y + Math.sin(this.angle + Math.PI*0.5) * this.radius * BOOST_DISTANCE
+        };
+        var imageDataLeft = this.context.getImageData(targetLeft.x, targetLeft.y, 1, 1);
+        var targetRight = {
+            x: this.x + Math.cos(this.angle - Math.PI*0.5) * this.radius * BOOST_DISTANCE,
+            y: this.y + Math.sin(this.angle - Math.PI*0.5) * this.radius * BOOST_DISTANCE
+        };
+        var imageDataRight = this.context.getImageData(targetRight.x, targetRight.y, 1, 1);
+
+        if (isHittingTrail(imageDataFront)) {
+            return true;
         }
 
-        return false;
+        if (isHittingTrail(imageDataRight) || isHittingTrail(imageDataLeft)) {
+            this.speed *= 1.02;
+        } else if(this.speed > this.normalSpeed){
+            this.speed *= 0.98;
+        }
 
+
+        return false;
+    }
+
+    function isHittingTrail (imageData) {
+        for (var index = 0; index < imageData.data.length; index += 4) {
+            if (imageData.data[index] != 0 || imageData.data[index + 1] != 0 || imageData.data[index + 2] != 0) {
+                return true;
+            }
+        }
     }
 
     Player.prototype.move = function () {
@@ -46,7 +68,7 @@ define([], function () {
     }
 
     Player.prototype.rotate = function (rotationDir) {
-        this.angle += this.rotationSpeed * rotationDir
+        this.angle += Math.PI * 0.5 * rotationDir;
     }
 
     return Player;

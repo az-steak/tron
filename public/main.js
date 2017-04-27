@@ -5,6 +5,7 @@ require(['Controller', 'Player'], function (Controller, Player) {
     var canvas;
     var context;
     var player;
+    var gameLoopInterval;
 
     socket = new io();
     controller = new Controller($('body'));
@@ -12,31 +13,60 @@ require(['Controller', 'Player'], function (Controller, Player) {
     canvas  = $(".whiteboard")[0];
     context = canvas.getContext('2d');
 
-    var randomColor = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
-    player = new Player({x: 500, y: 500}, randomColor, context);
 
     /// Listeners
 
 
-    socket.on("gameStart", startGame)
-    socket.on("drawLine",drawLine);
-    socket.emit("drawLine",{
-        x: player.x,
-        y: player.y,
-        width: player.radius,
-        color: player.color
-    });
-    console.log("Waitings!");
+    socket.on("sendAvailableSpawn", spawn);
+    socket.on("gameStart", startGame);
+    socket.on("drawLine", drawLine);
+    socket.on("reset", reset);
 
+    $("body").on('keydown',function(event){
+        if(event.keyCode == 37){
+            player.rotate(-1);
+        } else if(event.keyCode == 39) {
+            player.rotate(1);
+        }
+    })
+
+
+    function spawn (data) {
+        var randomColor = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+        player = new Player({x: data.spawn.x, y: data.spawn.y}, randomColor, context);
+
+        var data = {
+            x: player.x,
+            y: player.y,
+            width: player.radius,
+            color: player.color
+        };
+        drawCircle();
+
+        socket.emit("drawLine",data);
+        socket.emit("spawned", data);
+
+        console.log("Waitings!");
+    }
 
     function startGame () {
         console.log("start!");
-        setInterval(gameLoop, 10);
+        clearCanvas();
+        gameLoopInterval = setInterval(gameLoop, 10);
     }
 
     function gameLoop () {
-        controllsCheck();
+        // controllsCheck(); // smooth controls
+
+        player.move();
         if(player.isColliding()){kill()};
+        var data = {
+            x: player.x,
+            y: player.y,
+            width: player.radius,
+            color: player.color
+        }
+        socket.emit('drawLine', data);
     }
 
     function controllsCheck () {
@@ -45,16 +75,6 @@ require(['Controller', 'Player'], function (Controller, Player) {
         } else if (controller.keys[39]) { // right arrow
             player.rotate(1);
         }
-        player.move();
-
-        // console.log(player.Pos);
-        var data = {
-            x: player.x,
-            y: player.y,
-            width: player.radius,
-            color: player.color
-        }
-        socket.emit('drawLine', data);
     }
 
     function drawLine (data) {
@@ -71,8 +91,24 @@ require(['Controller', 'Player'], function (Controller, Player) {
         context.fill();
         context.closePath();
     }
+    function drawCircle () {
+        context.beginPath();
+        context.arc(player.x, player.y, player.radius * 2, 0, 2 * Math.PI, false);
+        context.lineWidth = 5;
+        context.strokeStyle = player.color;
+        context.stroke();
+        context.closePath();
+    }
+    function clearCanvas() {
+        context.clearRect(0, 0, 1920, 1080);
+    }
+
+    function reset () {
+        location.reload();
+    }
 
     function kill(){
-        console.log("You Dieded")
+        socket.emit('died');
+        clearInterval(gameLoopInterval);
     }
 });
