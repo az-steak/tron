@@ -10,20 +10,24 @@ define([], function () {
         this.angle = 0;
         this.color = colorValue;
 
-
-    }
-    /*
-    function canvasId(){
-        var myCanvas    = document.getElementsByClassName("whiteboard");
-        var context     = myCanvas.getContext('2d');
-        var imageData   = context.getImageData(x, y, myCanvas.width, myCanvas.height);
-        if(imageData.data[index] == 255 && imageData.data[index + 1] == 255 && imageData.data[index + 2] == 255){}
-
     }
 
-    Player.prototype.collisionManager = function(acutalPos) {
-        if(actualPos.x && actualPos.y )
-    }*/
+    Player.prototype.CollisionManager = function() {
+        isPixelWhite = true;
+        var myCanvas = document.getElementsByClassName("whiteboard")[0];
+        var context = myCanvas.getContext('2d');
+        var imageData = context.getImageData(this.x - 5, this.y - 5, this.x + 5, this.y + 5);
+        var index;
+        for (index = 0; index < getImageData.data.length; index += 4) {
+            if (imageData.data[index] != 255 || imageData.data[index + 1] != 255 || imageData.data[index + 2] != 255) {
+                return true;
+                console.log(isPixelWhite)
+            }
+        }
+
+        return false;
+
+    }
 
     Player.prototype.move = function () {
         this.x += Math.cos(this.angle) * this.speed;
