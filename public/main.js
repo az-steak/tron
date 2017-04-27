@@ -1,13 +1,15 @@
+require(['Controller'], function (Controller) {
 
+    var socket;
+    var controller;
 
-var socket;
-var controller;
-
-function main () {
     socket = new io();
-    controller = new Controller($('.whiteboard'));
+    controller = new Controller($('body'));
+    setInterval(controllsCheck, 10);
 
-}
 
+    function controllsCheck () {
+        
+    }
 
-main();
+});
